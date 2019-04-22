@@ -27,6 +27,20 @@ if (isset($_GET['dofcet'])){
     $rDate = time();
     $aDate = date("Y-m-d");
 }
+
+// Структура ответного массива для JSON
+$calResp = array(
+    'day' => '',
+    'holiday' => '',
+    'week' => '',
+    'post' => '',
+    'trapeza' => '',
+    'saints' => '',
+    'chten' => '',
+    'iconSrc' => '',
+    'iconAlt' => ''
+);
+
 // подключение к базе
 require './jsCalConf.php';
 $link = mysqli_connect($DB_HOST, $DB_USER, $DB_PASSW, $DB_NAME);
@@ -37,9 +51,11 @@ if ($link) {
     mysqli_query($link, "SET sql_mode = ''");
     mysqli_query($link, 'SET NAMES utf8');
 
+    // Заготовка наполняемых структур святых
     $daysinfo = '';
     $dayspic = '';
     $altpic = '';
+    
     $data = mysqli_query($link, "SELECT * FROM datelinked WHERE thedate='" . $aDate . "';");
     while ($row = mysqli_fetch_array($data, MYSQLI_ASSOC)) {
         // Разбор ответа от базы
@@ -51,19 +67,18 @@ if ($link) {
     // запрос данных из базы
     $data = mysqli_query($link, "SELECT * FROM dateindex WHERE thedate='" . $aDate . "';");
     while ($row = mysqli_fetch_array($data, MYSQLI_ASSOC)) {
-        // Разбор ответа от базы
-        print("function print_day(){"
-                . "document.write('". strftime("%e %B %Y", $rDate) . "р. (" . $row['stdate'] . " ст.сті.), " . UkrSymb(strftime("%A", $rDate)) ."'); "
-              ."}");
-        print("function print_week(){"
-                . "document.write('" . UkrSymb($row['dayprizn']) . "'); "
-                ."}");
-        print("function print_trapeza(){"
-                . "document.write('" . UkrSymb($row['dayinfo']) . "'); "
-                ."}");
-        print("function print_saints(){"
-                . "document.write('" . UkrSymb($daysinfo) . "'); "
-                ."}");
+        
+        // Разбор ответа от базы, и формирование ответа
+        $thisDate = strftime("%e %B %Y", $rDate);               // Дата в человеческом формате
+        $thisWeekday = UkrSymb(strftime("%A", $rDate));         // День недели на основе даты
+        
+        // Собираем строку даты на основе данных из бд и преобразований даты.
+        $calResp['day'] = $thisDate . "р. (" . $row['stdate'] . " ст.сті.), " . $thisWeekday; 
+        
+        // Готовим другие данные на основе ответа бд
+        $calResp['week'] = UkrSymb($row['dayprizn']); 
+        $calResp['trapeza'] = UkrSymb($row['dayinfo']);
+        $calResp['saints'] = UkrSymb($daysinfo);        
         
         $normalPath = '';
         $fixpath = $_SERVER['REQUEST_URI'];
@@ -72,19 +87,18 @@ if ($link) {
         foreach ($fixpath as $value) {
             $normalPath .= $value."/";
         }         
-        print("function print_icon(){"
-                . "document.write(\"<img src='".$normalPath.$dayspic."' alt='".$altpic."' width='112' border='0'>\"); "
-                ."}");
         
-        //print( . $row['dayprizn'] .  $row['dayinfo'] );
+        $calResp['iconSrc'] = $normalPath.$dayspic;
+        $calResp['iconAlt'] = $altpic;
+        
     }
     
     if(mysqli_num_rows($data)==0){
-        print("function print_day(){"
-                . "document.write('". strftime("%e %B %Y", $rDate) . "р. <br> Нет данных об указанном дне'); "
-              ."}");
+        $calResp['day'] = strftime("%e %B %Y", $rDate) . "р. <br> Нет данных об указанной дне";
     }
 
 } else {
-    print(mysqli_connect_error() . PHP_EOL);
+    $calResp['day'] = mysqli_connect_error();
 }
+
+print(json_encode($calResp));
