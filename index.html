@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-        <!--
-            *** Встраиваемый украіноязичный православный каленадарь - демо ***
-                Created on : 10.04.2019
-                Author     : scadl, 
-                Editor     : landriy
-        -->
+<!--
+    *** Встраиваемый украіноязичный православный каленадарь - демо ***
+        Created on : 10.04.2019
+        Author     : scadl, 
+        Editor     : landriy
+-->
 <html>
     <head>
         <title>Встраиваемый украіноязичный православный каленадарь</title>
@@ -12,31 +12,111 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
-        <script language="Javascript"
-        src="https://orthodox.pp.ua/calendar/jsCalData.php"></script>
-        <p align="center"><b><font face="Arial" size="5">
-                <script language="Javascript">print_day();</script></font></b></p>
-        <p align="center"><b><font color="#FF0000" size="3" face="Arial">&nbsp;
-                <script language="Javascript">print_holiday();</script></font></b>
-        <p align="center">&nbsp;
+        
+        <!-- Для вставки к себе, Копируй код от сюда... -->
+        <script language="Javascript" type="text/javascript">
+
+            // Настройки скрипта.             
+            var srcDataScript = "jsCalData.php";    // Полный путь к скрипту на сервере
+            var srcPayload = "2019-04-10";          // Дата для сдвига чтения. Если не нужно - поставь null
+
+            //В зависимости от браузера, код для создания объекта может быть разный. 
+            //Кроссбраузерная функция создания XMLHttpRequest:
+            function getXmlHttp() {
+                var xmlhttp;
+                try {
+                    xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
+                } catch (e) {
+                    try {
+                        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+                    } catch (E) {
+                        xmlhttp = false;
+                    }
+                }
+                if (!xmlhttp && typeof XMLHttpRequest != 'undefined') {
+                    xmlhttp = new XMLHttpRequest();
+                }
+                return xmlhttp;
+            }
+
+            // Сам Aсинхронный запрос к твоему скрипту на сервере.
+            var req = getXmlHttp();                                         // Создали объект запроса
+            if (srcPayload) {                                         // Опеределили есть ли праметры
+                req.open('GET', srcDataScript + '?dofcet=' + srcPayload);   // Запрос с праметром
+            } else {
+                req.open('GET', srcDataScript);                             // Запрос без парметров
+            }
+            req.onreadystatechange = function () {
+                if (req.readyState == 4) {
+                    if (req.status == 200) {
+                        // Ответ получен успешно.
+                        var calData = JSON.parse(req.responseText);
+                        document.getElementById("print_day").innerHTML = calData['day'];
+                        document.getElementById("print_holiday").innerHTML = calData['holiday'];
+                        document.getElementById("print_week").innerHTML = calData['week'];
+                        document.getElementById("print_post").innerHTML = calData['post'];
+                        document.getElementById("print_trapeza").innerHTML = calData['trapeza'];
+                        document.getElementById("print_saints").innerHTML = calData['saints'];
+                        document.getElementById("print_chten").innerHTML = calData['chten'];
+                        document.getElementById("print_icon").setAttribute("src",calData['iconSrc']);
+                        document.getElementById("print_icon").setAttribute("alt",calData['iconAlt']);
+                    }
+                }
+
+            }            
+            req.send();
+
+        </script>
+
+        <p align="center">
+            <b>
+                <font face="Arial" size="5">
+                <span id="print_day"></span>
+                </font>
+            </b>
+        </p>
+        <p align="center">
+            <b>
+                <font color="#FF0000" size="3" face="Arial">                
+                <span id="print_holiday"></span>
+                </font>
+            </b>
+        <p align="center">            
+
         <table border="0" cellpadding="5" cellspacing="0" width="100%">
             <tr>
-                <td width="50%"><b>
-                        <script language="Javascript">print_week()</script></b></td>
+                <td width="50%">
+                    <b>
+                        <span id="print_week"></span>
+                    </b>
+                </td>
                 <td width="50%" align="right">
-                    <script language="Javascript">print_post();</script>&nbsp;<br>
-                    <i><script language="Javascript">print_trapeza();</script></i></td>
+                    <span id="print_post"></span> 
+                    <br>
+                    <i>
+                        <span id="print_trapeza"></span>
+                    </i>
+                </td>
             </tr>
         </table>
+
         <table border="0" cellpadding="5" cellspacing="0" width="100%">
             <tr>
                 <td width="70%" valign="top">
-                    <script language="Javascript">print_saints();</script>
-                    <p>&nbsp;
-                        <script language="Javascript">print_chten();</script></td>
-                <td width="30%" bgcolor="#CCCCCC"><font size="1" face="Arial">&nbsp;
-                    <script language="Javascript">print_icon();</script>
-                    </font></td></tr>
-        </table>
+                    <span id="print_saints"></span>
+                    <p>
+                        <span id="print_chten"></span>
+                    </p>
+                </td>
+                <td width="30%" bgcolor="#CCCCCC">
+                    <font size="1" face="Arial">                    
+                    <img id="print_icon" src='' alt='' width='112' border='0'>
+                    </font>
+                </td>
+            </tr>
+        </table>        
+        <!-- до сюда... -->
+
     </body>
 </html>
+
