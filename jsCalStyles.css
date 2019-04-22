@@ -1,0 +1,36 @@
+/* 
+    Created on : 10.04.2019
+    Author     : scadl, 
+    Editor     : landriy
+*/
+
+label{
+    font-weight: bold;
+}
+body{
+    font-family: sans-serif;
+}
+
+.myForm{
+    width: 95%;
+    background: silver;
+    margin: 20px;
+    padding: 5px;
+}
+.myEdit{
+    margin: 5px;
+    padding: 5px;
+    width: inherit;                
+}
+.OK{
+    font-weight: bold;    
+    text-align: center;
+    color: green;
+}
+.Err{
+    font-weight: bold;    
+    text-align: center;
+    color: red;
+}
+
+

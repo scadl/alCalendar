@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+        <!--
+            *** Встраиваемый украіноязичный православный каленадарь - демо ***
+                Created on : 10.04.2019
+                Author     : scadl, 
+                Editor     : landriy
+        -->
+<html>
+    <head>
+        <title>Встраиваемый украіноязичный православный каленадарь</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <script language="Javascript"
+        src="https://orthodox.pp.ua/calendar/jsCalData.php"></script>
+        <p align="center"><b><font face="Arial" size="5">
+                <script language="Javascript">print_day();</script></font></b></p>
+        <p align="center"><b><font color="#FF0000" size="3" face="Arial">&nbsp;
+                <script language="Javascript">print_holiday();</script></font></b>
+        <p align="center">&nbsp;
+        <table border="0" cellpadding="5" cellspacing="0" width="100%">
+            <tr>
+                <td width="50%"><b>
+                        <script language="Javascript">print_week()</script></b></td>
+                <td width="50%" align="right">
+                    <script language="Javascript">print_post();</script>&nbsp;<br>
+                    <i><script language="Javascript">print_trapeza();</script></i></td>
+            </tr>
+        </table>
+        <table border="0" cellpadding="5" cellspacing="0" width="100%">
+            <tr>
+                <td width="70%" valign="top">
+                    <script language="Javascript">print_saints();</script>
+                    <p>&nbsp;
+                        <script language="Javascript">print_chten();</script></td>
+                <td width="30%" bgcolor="#CCCCCC"><font size="1" face="Arial">&nbsp;
+                    <script language="Javascript">print_icon();</script>
+                    </font></td></tr>
+        </table>
+    </body>
+</html>
