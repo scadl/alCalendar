@@ -5,10 +5,8 @@
         <group>
             <file>file:/D:/xampp2/htdocs/alCalendar/jsCalData.php</file>
             <file>file:/D:/xampp2/htdocs/alCalendar/index.html</file>
-            <file>file:/D:/xampp2/htdocs/alCalendar/jsCalIO.php</file>
-            <file>file:/D:/xampp2/htdocs/alCalendar/jsCalStyles.css</file>
-            <file>file:/D:/xampp2/htdocs/alCalendar/jsCalConf.php</file>
             <file>file:/D:/xampp2/htdocs/alCalendar/jsCalEdit.php</file>
+            <file>file:/D:/xampp2/htdocs/alCalendar/jsCalIO.php</file>
         </group>
     </open-files>
 </project-private>
